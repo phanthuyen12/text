@@ -29,7 +29,7 @@ contract Done is Ownable {
     event FundingEnded(); // Sự kiện ghi lại thông tin khi kết thúc huy động vốn
 
     // Constructor khởi tạo hợp đồng với các tham số đầu vào
-    constructor(IERC20 _projectToken, IERC20 _stableCoin, uint256 _tokenPrice, string memory _projectName) Ownable() {
+    constructor(IERC20 _projectToken, IERC20 _stableCoin, uint256 _tokenPrice, string memory _projectName) Ownable(msg.sender) {
         projectToken = _projectToken; // Khởi tạo token dự án
         stableCoin = _stableCoin; // Khởi tạo stablecoin
         tokenPrice = _tokenPrice; // Khởi tạo giá token
@@ -44,7 +44,7 @@ contract Done is Ownable {
         require(donors[msg.sender].stablecoinAmount > 0, "You are not a donor"); // Kiểm tra nếu địa chỉ gọi hàm là nhà tài trợ
         _;
     }
-    function checkAdmin(address tokenuser) modifier{
+    modifier  checkAdmin(address tokenuser) {
  require(msg.sender == tokenuser, "Not an admin"); // Kiểm tra xem người gọi có phải là admin không
         _;
     }
