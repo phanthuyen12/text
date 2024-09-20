@@ -1,12 +1,15 @@
-const Done = artifacts.require("Done");
-const ProjectToken = artifacts.require("ProjectToken"); // Thay 'YourTokenContract' bằng tên hợp đồng token của bạn
+const DoneToken = artifacts.require("DoneToken");
+const ProjectToken = artifacts.require("ProjectToken");
 
 module.exports = async function (deployer) {
-    // Triển khai hợp đồng token trước
     await deployer.deploy(ProjectToken);
-    const projectToken = await ProjectToken.deployed();
-    
-    // Triển khai hợp đồng Done với địa chỉ token và giá token
-    const tokenPrice = web3.utils.toWei("0.1", "ether"); // Thay đổi giá token nếu cần
-    await deployer.deploy(Done, projectToken.address, tokenPrice);
+    const projectTokenInstance = await ProjectToken.deployed();
+
+    // Địa chỉ của coin stable với checksum
+    const stableCoinAddress = web3.utils.toChecksumAddress("0xA0b86991c6218b36c1d19d4a2e9eb0ce3606eb48");
+    const rateToken = 100; // Tỉ lệ quy đổi
+    const nameToken = "Thuyememe"; // Tên token
+
+    // Địa chỉ admin (thay đổi thành địa chỉ bạn muốn chỉ định làm admin)
+    await deployer.deploy(DoneToken, projectTokenInstance.address, stableCoinAddress, rateToken, nameToken);
 };
